@@ -42,7 +42,7 @@
 		- If you have any problem, probably is the fact that the extension is not able to find the julia executable
 		- With `juliaup` the executable is `~/.juliaup/bin/julia`; with a distribution package it is wherever that package puts it, and `which julia` will tell you
 - ## First steps in VSCode/Julia
-	- We make a directory, I called it `~/Coding/HSI`
+	- We make a directory, I called it `~/Code/HSI`
 	- Good practice: when we work on a new project, whether its coding a package or experiments, it is good to make a new environment, so you avoid loading unnecessary packages for your actual work
 	- Open VSCode, open folder, go to the folder you created
 	- Press `F1` and start the Julia REPL

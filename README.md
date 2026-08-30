@@ -27,13 +27,9 @@ The notebooks for the remaining lectures are still to come.
 
 ## Setting up
 
-```julia
-import Pkg
-Pkg.activate(".")
-Pkg.instantiate()
-```
+Nothing to instantiate: making the environment is part of Lecture 1, and you
+will create it yourself in a directory of your own. Follow `Lecture1.md` from
+the top; it installs Julia, sets up the REPL and VSCode, and ends with a first
+numerical experiment.
 
-`Project.toml` lists the packages the school uses. `Manifest.toml` is generated
-by `instantiate` and should be committed once it resolves cleanly on the Julia
-version the school will actually use, so that every participant gets the same
-environment.
+Later lectures will bring their own notebooks and say which packages they need.
