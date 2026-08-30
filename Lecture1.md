@@ -103,6 +103,22 @@
 	- A **type** is a label that tells Julia (and you) what kind of data something is, like “an integer number,” “a decimal number,” or “a complex number.”
 	- In practice a **type** describes both the *kind of data* (like integers, floating-point numbers, strings, arrays, functions) and how Julia should store it in memory and choose the right method to run when you call a function.
 	- In Julia, everything has a type. Types tell Julia how to represent data in memory and which version of a function to run (this is called **multiple dispatch**).
+	- Types are arranged in a hierarchy, and this is what lets us write a function once and use it with numbers of many kinds
+		- ```julia
+		  julia> Float64 <: AbstractFloat <: Real <: Number
+		  true
+		  julia> supertype(Float64)
+		  AbstractFloat
+		  ```
+		- the operator `<:` reads "is a subtype of"; `Float64 <: Real` says that every `Float64` is a `Real`
+	- The distinction that matters is between **concrete** and **abstract** types
+		- a concrete type, such as `Float64` or `BigFloat`, describes how a value is actually laid out in memory, and values have concrete types
+		- an abstract type, such as `Real` or `Number`, has no layout of its own; it exists to group the concrete types under it, so that we can say what a function accepts without saying exactly which representation we mean
+		- ```julia
+		  julia> isconcretetype(Float64), isconcretetype(Real)
+		  (true, false)
+		  ```
+	- This is why we will be able, in the next lectures, to take a function written for ordinary floating point numbers and run it on numbers that carry a rigorous error bound with them; the function was never written for `Float64` in particular, it was written for anything that behaves like a number
 - ## First use of Julia
 	- In the REPL now we can use Julia to make some simple computations
 	- We can use Julia as a simple calculator
@@ -177,6 +193,15 @@
 		  end
 		  ```
 	- This is similar to what is achieved in C++ by using templates, but it is simpler to use
+- ## Multiple dispatch, and why the generic version works
+	- When we write `x = T(x)` inside `orbit`, Julia has to decide which `*` and which `-` to run, and it decides by looking at the types of the arguments; a function in Julia is a name with several **methods** attached to it, and the method is chosen by the types of all the arguments, not only the first
+	- We can see how many methods a common operation has
+		- ```julia
+		  julia> length(methods(*))
+		  ```
+		- there are hundreds; multiplying two `Float64` and multiplying two matrices are different pieces of code sharing one name
+	- This is the mechanism behind the generic `orbit` we just wrote. We never told it what kind of number to use: `zeros(typeof(x0), N)` makes storage of whatever kind `x0` is, and `T(x)` selects the arithmetic that belongs to that kind
+	- The consequence is worth stating plainly, because the rest of the school depends on it: to compute the same orbit in a different arithmetic we do not modify `orbit`, we pass it a different number
 - ## Plotting the histogram of an orbit
 	- We would like to plot the histogram of an orbit, to visualize the frequency of visits of the dynamical system  $T:[0,1]\to[0,1]$, $T(x)=4x(1-x)$, in different parts of the interval
 	- Since we already have implemented the orbit function this is quite easy
@@ -200,10 +225,39 @@
 	  plot!(plt, g, 0, 1, color=:orange, label = "Density")
 	  ```
 	- The command plot! allows us to plot on top of an already made plot
+- ## How much of that orbit was real?
+	- We have just plotted ten thousand points and compared them with a density, and the agreement is good; it is worth asking whether the orbit we computed is the orbit we intended to compute
+	- `BigFloat` is a floating point type of arbitrary precision, and it is in Julia by default, so we need install nothing. We run the **same function**, with the same starting value, changing only the kind of number we hand it
+		- ```julia
+		  setprecision(BigFloat, 256)
+		  a = orbit(T, 0.1, 120)             # ordinary floating point, 53 bits
+		  b = orbit(T, BigFloat(0.1), 120)   # the same code, 256 bits
+		  typeof(a), typeof(b)
+		  (Vector{Float64}, Vector{BigFloat})
+		  ```
+		- note that the two arrays have different types, and that we did not write a second `orbit` to obtain the second one
+	- Comparing them term by term, the two agree at first and then stop agreeing
+		- ```
+		  n= 10   difference = 5.4e-15
+		  n= 20   difference = 1.3e-11
+		  n= 30   difference = 8.5e-09
+		  n= 40   difference = 4.8e-06
+		  n= 50   difference = 1.2e-02
+		  n= 55   difference = 4.8e-01
+		  ```
+		- by `n = 54` the two disagree by more than `0.1`; one says `x = 0.2144`, the other says `x = 0.0523`, and the interval has length one, so they agree about nothing at all
+	- While the difference is small it grows by about a factor of two at every step, which is what it means for this map to be chaotic; starting from the smallest error a `Float64` can carry, about `1e-16`, some fifty doublings are enough to reach the size of the whole interval
+	- After that it stops growing, and this is worth noticing in the numbers above: at `n = 55` the difference is `0.48` and at `n = 60` it is `0.34`. Nothing is diverging, and nothing can, since both orbits remain in `[0,1]` for ever; the difference simply saturates at the size of the interval and then fluctuates
+	- Saturation is not a consolation. A difference of order one on an interval of length one means the two computations agree about nothing, and there is no way to tell from the numbers themselves which of them, if either, is near the true orbit
+	- Two conclusions, and the second is the one that matters
+		- the orbit we plotted is not the orbit of `0.1`; after about fifty steps it is the orbit of some other point we cannot name
+		- computing with more digits does not repair this, it only postpones it; the `BigFloat` orbit is wrong too, a few hundred steps later
+	- The histogram, on the other hand, was not obviously wrong, and this is a real phenomenon rather than luck: the statistics of these orbits are stable even though the orbits are not. Saying that precisely, and proving it for a given map on a computer, is what the rest of the school is about, and it requires arithmetic that carries its own error bounds rather than arithmetic that discards them
 - ## Summary of the lecture
 	- We installed Julia and VScode
 	- We installed some basic packages
-	- We used the REPL and discussed on types
+	- We used the REPL and discussed types, the hierarchy they form, and multiple dispatch
 	- We implemented a somewhat more complicated function
 	- Made a small discussion on generic code
 	- Plotted a histogram
+	- Saw that the orbit behind it was not the one we asked for, and that more precision does not fix it
