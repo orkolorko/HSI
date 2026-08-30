@@ -201,7 +201,7 @@
 		  ```
 		- there are hundreds; multiplying two `Float64` and multiplying two matrices are different pieces of code sharing one name
 	- This is the mechanism behind the generic `orbit` we just wrote. We never told it what kind of number to use: `zeros(typeof(x0), N)` makes storage of whatever kind `x0` is, and `T(x)` selects the arithmetic that belongs to that kind
-	- The consequence is worth stating plainly, because the rest of the school depends on it: to compute the same orbit in a different arithmetic we do not modify `orbit`, we pass it a different number
+	- So to compute the same orbit in a different arithmetic we do not modify `orbit`, we pass it a different number; the rest of the school rests on this
 - ## Plotting the histogram of an orbit
 	- We would like to plot the histogram of an orbit, to visualize the frequency of visits of the dynamical system  $T:[0,1]\to[0,1]$, $T(x)=4x(1-x)$, in different parts of the interval
 	- Since we already have implemented the orbit function this is quite easy
@@ -247,7 +247,7 @@
 		  ```
 		- by `n = 54` the two disagree by more than `0.1`; one says `x = 0.2144`, the other says `x = 0.0523`, and the interval has length one, so they agree about nothing at all
 	- While the difference is small it grows by about a factor of two at every step, which is what it means for this map to be chaotic; starting from the smallest error a `Float64` can carry, about `1e-16`, some fifty doublings are enough to reach the size of the whole interval
-	- After that it stops growing, and this is worth noticing in the numbers above: at `n = 55` the difference is `0.48` and at `n = 60` it is `0.34`. Nothing is diverging, and nothing can, since both orbits remain in `[0,1]` for ever; the difference simply saturates at the size of the interval and then fluctuates
+	- After that it stops growing. At `n = 55` the difference is `0.48` and at `n = 60` it is `0.34`. Nothing is diverging, and nothing can, since both orbits remain in `[0,1]` for ever; the difference simply saturates at the size of the interval and then fluctuates
 	- Saturation is not a consolation. A difference of order one on an interval of length one means the two computations agree about nothing, and there is no way to tell from the numbers themselves which of them, if either, is near the true orbit
 	- Two conclusions follow
 		- the orbit we plotted is not the orbit of `0.1`; after about fifty steps it is the orbit of some other point we cannot name
