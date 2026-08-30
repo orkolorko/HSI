@@ -249,7 +249,7 @@
 	- While the difference is small it grows by about a factor of two at every step, which is what it means for this map to be chaotic; starting from the smallest error a `Float64` can carry, about `1e-16`, some fifty doublings are enough to reach the size of the whole interval
 	- After that it stops growing, and this is worth noticing in the numbers above: at `n = 55` the difference is `0.48` and at `n = 60` it is `0.34`. Nothing is diverging, and nothing can, since both orbits remain in `[0,1]` for ever; the difference simply saturates at the size of the interval and then fluctuates
 	- Saturation is not a consolation. A difference of order one on an interval of length one means the two computations agree about nothing, and there is no way to tell from the numbers themselves which of them, if either, is near the true orbit
-	- Two conclusions, and the second is the one that matters
+	- Two conclusions follow
 		- the orbit we plotted is not the orbit of `0.1`; after about fifty steps it is the orbit of some other point we cannot name
 		- computing with more digits does not repair this, it only postpones it; the `BigFloat` orbit is wrong too, a few hundred steps later
 	- The histogram, on the other hand, was not obviously wrong, and this is a real phenomenon rather than luck: the statistics of these orbits are stable even though the orbits are not. Saying that precisely, and proving it for a given map on a computer, is what the rest of the school is about, and it requires arithmetic that carries its own error bounds rather than arithmetic that discards them
