@@ -51,6 +51,26 @@
 	- in the REPL we install the `Plots` package, by using `Pkg.add("Plots")`
 	- Now we also change the environment for VSCode, by clicking on Julia env in the bottom state menu and choosing our working directory; this is to make VSCode aware of the packages we installed in the environment
 	- Remark that using environments comes with zero cost: julia only downloads and compile one copy of the package that is then made available to the environments
+- ## Keyboard shortcuts worth knowing
+	- The **command palette** is the one to remember: every command in VSCode can be found there by name, so you never have to memorise the rest
+		- `F1` works on every platform; `Ctrl+Shift+P` on Windows and Linux, `Cmd+Shift+P` on macOS
+		- type `Julia` in it to see everything the extension can do
+	- The Julia extension binds the **same keys on every platform**; there are no separate macOS bindings. On a Mac, `Alt` is the `Option` (`⌥`) key, and `Ctrl` stays `Ctrl`, it does not become `Cmd`
+		- | what it does | keys |
+		  |---|---|
+		  | Start the Julia REPL | `Alt+J` `Alt+O` |
+		  | Restart it (after changing an environment, say) | `Alt+J` `Alt+R` |
+		  | Stop it | `Alt+J` `Alt+K` |
+		  | Run the current line or selection | `Ctrl+Enter` |
+		  | Run it and move to the next line | `Shift+Enter` |
+		  | Run the current cell | `Alt+Enter` |
+		  | Interrupt a computation that is taking too long | `Ctrl+C` |
+		  | Change the active environment | `Alt+J` `Alt+E` |
+		  | Show documentation for what is under the cursor | `Alt+J` `Alt+D` |
+		  | Show the plot pane | `Alt+J` `Alt+P` |
+		- the `Alt+J` combinations are chords: press `Alt+J`, release, then press the second combination
+	- In the REPL itself, three keys change the prompt, and they are worth practising
+		- `]` enters package mode, `?` enters help, `;` enters shell mode, and `backspace` on an empty line returns to `julia>`
 - ## Compiler vs Interpreter
 	- ### Compiled Languages (C, C++, Fortran, …)
 		- A **compiler** translates your entire program (written in a high-level language) into **machine code** once, before execution.
