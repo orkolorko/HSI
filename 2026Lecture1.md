@@ -1,15 +1,14 @@
 - ## Why Julia
-	- Terse sintax
+	- Terse syntax
 	- Easy to write, similar to mathematics
 	- Syntactic sugar
 	- Less boilerplate
 - ## Installing Julia
-	- Installation instruction can be found at [https://julialang.org/downloads/] (windows and linux)
+	- Installation instructions for Windows, Linux and macOS can be found at [julialang.org/downloads](https://julialang.org/downloads/)
 		- This will install the [Juliaup](https://github.com/JuliaLang/juliaup) installation manager, which will automatically install Julia and help keep it up to date. The command `juliaup` is also installed. To install different julia versions see `juliaup --help`.
-	- on Ubuntu, I installed Julia through snap
-		- `snap install julia`, this also keeps my installation up to date; when on a system with snap, I prefer to use the snap installer, but it is a matter of taste...
-		  The biggest difference is that `juliaup` provides the `julia` executable only to one user, while `snap install julia` installs julia systemwide
-	- Please remark that the fact that `julia` automatically updates sometimes can be somewhat problematic, because it leads sometimes to the fact that breaking versions of a package may be installed
+		- `juliaup` is what the Julia project recommends on every platform, and it is what we use; it installs Julia for one user, under `~/.juliaup`
+		- distribution packages (`apt`, `snap`) also exist, and install Julia systemwide, which is occasionally what you want on a shared machine; they tend to lag behind, so if you use one, check `julia --version` against the current release before assuming a package will work
+	- Remark that `juliaup` keeps Julia up to date by itself; this is convenient, but it also means the version under you can change between one session and the next, and a package that worked may stop working. We will see in the next lectures how an environment records the exact versions a piece of work needs, which is the answer to this problem
 - ## The Julia REPL and initial setup
 	- The basic way of interfacing with Julia is the REPL, the **Read-Eval-Print Loop**
 	- At a first glance, it looks like a fancy calculator
@@ -25,7 +24,7 @@
 			- this means that we are bringing the `Pkg` name in scope inside the REPL (but not its subnames)
 			- Now, we can call `Pkg.add("BenchmarkTools")`; this installs a package to do Benchmarks
 			- Since we only imported the `Pkg` name in scope, we need to specify the function using the dot notation
-			- I use this form when I want to avoid polluting my namespaces (it is not really important in Julia, since it is strongly typed, but it is a good practice)
+			- I use this form when I want to avoid polluting my namespaces; this matters less in Julia than in many languages, not because of types as such but because multiple dispatch lets two packages export a function of the same name and still be told apart by their arguments, but it remains a good practice
 			- Instead of `import` we could have used `using Pkg` that imports the name `Pkg` and all the names exported by `Pkg`
 			- We install one last package `Pkg.add("Revise")`, this package allows Julia to recompile functions on the fly when we change them in a loaded package
 	- Now, for me it is a good practice to start these packages as Julia starts, therefore, we make a file
@@ -41,7 +40,7 @@
 		- On windows, we just go to the page above and download it
 	- Install the Julia extension, that is going to take care of the interface between VSCode and Julia
 		- If you have any problem, probably is the fact that the extension is not able to find the julia executable
-		- On Ubuntu, if you installed through snap, the path is `/snap/julia/current/bin/julia`
+		- With `juliaup` the executable is `~/.juliaup/bin/julia`; with a distribution package it is wherever that package puts it, and `which julia` will tell you
 - ## First steps in VSCode/Julia
 	- We make a directory, I called it `~/Coding/HSI2026`
 	- Good practice: when we work on a new project, whether its coding a package or experiments, it is good to make a new environment, so you avoid loading unnecessary packages for your actual work
@@ -128,7 +127,7 @@
 			  └──      return %2
 			  ```
 		- When we ran this function Julia identified that the input was an integer, checked if it had available all the functions needed to compile this function with an integer input and compiled a version of this function and stored it in memory (recently, it also stores them on disc, to avoid recompilation); this means that the **the first time** we ran a function Julia is going to incur in overhead, but the **second time** it is going to have access to a compiled and often optimized version of the function which is going to be really fast
-		- Functions that start with an `@` are called **macros** and are functions that act on julia source code before compilations. The macro `@code_warntype`is used to analyze the julia code and identify eventual type instabilities
+		- Functions that start with an `@` are called **macros** and are functions that act on Julia source code before compilation. The macro `@code_warntype` is used to analyse the Julia code and identify eventual type instabilities
 		- The macro `@time` computes the runtime of a function
 		- In the REPL, we can access the help prompt by pressing `?`
 		- We ran the example in the help
@@ -159,14 +158,14 @@
 		  ```
 	- This is similar to what is achieved in C++ by using templates, but it is simpler to use
 - ## Plotting the histogram of an orbit
-	- We would like to plot the histogram of an orbit, to visualize the frequency of visits of the dynamical system  $T:[0,1]\to [0,1]$ , $T(x)=4x(1-x)$ , in different parts of the interval
+	- We would like to plot the histogram of an orbit, to visualize the frequency of visits of the dynamical system  $T:[0,1]\to[0,1]$, $T(x)=4x(1-x)$, in different parts of the interval
 	- Since we already have implemented the orbit function this is quite easy
 	- We need to install the Plots package (it takes some time)
 		- ```julia
 		  Pkg.add("Plots")
 		  using Plots
 		  ```
-	- Now, we define our dynamical system and compute an orbit that starts at the point $x0=0.1$
+	- Now, we define our dynamical system and compute an orbit that starts at the point $x_0=0.1$
 	- It is worth remarking that this is a numerical experiment
 		- ```julia
 		  T(x) = 4*x*(1-x)
@@ -187,5 +186,4 @@
 	- We used the REPL and discussed on types
 	- We implemented a somewhat more complicated function
 	- Made a small discussion on generic code
-	- Plotted an histogram
-	-
+	- Plotted a histogram
