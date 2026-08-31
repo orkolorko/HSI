@@ -6,6 +6,9 @@
 - ## Installing Julia
 	- Installation instructions for Windows, Linux and macOS can be found at [julialang.org/downloads](https://julialang.org/downloads/)
 		- This will install the [Juliaup](https://github.com/JuliaLang/juliaup) installation manager, which will automatically install Julia and help keep it up to date. The command `juliaup` is also installed. To install different julia versions see `juliaup --help`.
+		- On Linux, and on macOS too, the instructions on that page come down to a single line, which is the one we run now:
+			- `curl -fsSL https://install.julialang.org | sh`
+			- it installs under `~/.juliaup`, and it puts `~/.juliaup/bin` on the `PATH` by editing the shell startup files; the shell that ran it keeps the `PATH` it started with, so open a new terminal, or `source ~/.bashrc`, before typing `julia`
 		- `juliaup` is what the Julia project recommends on every platform, and it is what we use; it installs Julia for one user, under `~/.juliaup`
 		- distribution packages (`apt`, `snap`) also exist, and install Julia systemwide, which is occasionally what you want on a shared machine; they tend to lag behind, so if you use one, check `julia --version` against the current release before assuming a package will work
 	- Remark that `juliaup` keeps Julia up to date by itself; this is convenient, but it also means the version under you can change between one session and the next, and a package that worked may stop working. We will see in the next lectures how an environment records the exact versions a piece of work needs, which is the answer to this problem
